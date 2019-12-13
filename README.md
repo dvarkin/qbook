@@ -1,2 +1,0 @@
-# qbook
-Q line manager
