@@ -1,7 +1,5 @@
 /* initialise variable */
-var ws, syms = document.getElementById("selectSyms"),
-    matches = document.getElementById("tblMatches"),
-    trades = document.getElementById("tblTrade");
+var ws, matches = document.getElementById("tblMatches");
 
 function connect() {
     if ("WebSocket" in window) {
@@ -19,6 +17,7 @@ function connect() {
             to the appropriate handler function*/
             switch(d.func){
             case 'getMatches' : setMatches(d.result); break;
+	    case 'putMatchUpdate' : setMatchUpdate(d.result); break;
 	    default: console.log(d);
             }
         };
@@ -27,6 +26,32 @@ function connect() {
     } else alert("WebSockets not supported on your browser.");
 }
 
+function setMatchUpdate(data) {
+    for (var i = 0; i < data.length; i++) {
+	var match_id = data[i][0].match_id;
+	var row = insertRowHTML(i, data[i]);
+	var element = document.getElementById(match_id);
+//	console.log(row);
+	element.innerHTML = row;
+    }
+}
+
+function insertRowHTML(i, data) {
+    var rowHTML = '';
+    /* loop through the rows, putting tags around each col value */
+    rowHTML += '<tr id='+ data[i]['match_id'] + '>';
+    for (var x in data[0]) {
+        /* Instead of pumping out the raw data to the table, let's
+           format it according to its type*/
+        var cellData;
+        if("number" == typeof data[i][x])
+            cellData = data[i][x].toFixed(2);
+        else cellData = data[i][x];
+        rowHTML += '<td>' + cellData + '</td>';
+    }
+    rowHTML += '</tr>';
+    return rowHTML
+}
 
 function setMatches(data) { matches.innerHTML = generateTableHTML(data) }
 
@@ -41,17 +66,7 @@ function generateTableHTML(data){
     tableHTML += '</tr>';
     for (var i = 0; i < data.length; i++) {
         /* loop through the rows, putting tags around each col value */
-        tableHTML += '<div id='+ data[i]['match_id'] + '><tr>';
-        for (var x in data[0]) {
-            /* Instead of pumping out the raw data to the table, let's
-            format it according to its type*/
-            var cellData;
-            if("number" == typeof data[i][x])
-                cellData = data[i][x].toFixed(2);
-            else cellData = data[i][x];
-            tableHTML += '<td>' + cellData + '</td>';
-        }
-        tableHTML += '</tr></div>';
+	tableHTML += insertRowHTML(i, data);
     }
     tableHTML += '</table>';
     return tableHTML;

@@ -15,7 +15,7 @@ loadPage:{ getMatches[.z.w]; sub[`putMatchUpdate;enlist `]}
 
 getMatches:{ (neg[x]) .j.j `func`result!(`getMatches;m())}
 
-putMatchUpdate:{`func`result!(`putMatchUpdate; h"queue")}
+putMatchUpdate:{`func`result!(`putMatchUpdate; h"value queue")}
 
 pub:{
  row:(0!subs)[x];
