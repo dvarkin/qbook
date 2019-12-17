@@ -15,7 +15,7 @@ loadPage:{ getMatches[.z.w]; sub[`putMatchUpdate;enlist `]}
 
 getMatches:{ (neg[x]) .j.j `func`result!(`getMatches;m())}
 
-putMatchUpdate:{`func`result!(`putMatchUpdate; h"select match_id,home_team,away_team,home,draw,away,home_score,away_score value queue")}
+putMatchUpdate:{`func`result!(`putMatchUpdate; h"value queue")}
 
 pub:{
  row:(0!subs)[x];

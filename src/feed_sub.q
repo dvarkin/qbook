@@ -16,7 +16,7 @@ client:.kfk.Consumer[`metadata.broker.list`group.id!`localhost:9092`0];
  insert_1x2[data];
 // show data;
  match_id: data[`match_id];
- match_state: get_match_state match_id ;
+ match_state: select match_id,home_team,away_team,home,draw,away,home_score,away_score from get_match_state match_id ;
  queue[match_id]:match_state;
  }
 
