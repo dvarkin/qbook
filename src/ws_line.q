@@ -1,6 +1,6 @@
 h:hopen`::5001; /* connect to rdb */
 
-m:{h"get_all_matches_state()"}
+m:{h"select match_id,home_team,away_team,home,draw,away,home_score,away_score from get_all_matches_state()"}
 
 \p 5002
 
@@ -15,7 +15,7 @@ loadPage:{ getMatches[.z.w]; sub[`putMatchUpdate;enlist `]}
 
 getMatches:{ (neg[x]) .j.j `func`result!(`getMatches;m())}
 
-putMatchUpdate:{`func`result!(`putMatchUpdate; h"value queue")}
+putMatchUpdate:{`func`result!(`putMatchUpdate; h"select match_id,home_team,away_team,home,draw,away,home_score,away_score value queue")}
 
 pub:{
  row:(0!subs)[x];

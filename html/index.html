@@ -10,7 +10,7 @@
         <div class="split">
             <h3>Matches</h3>
             <!-- <table id="tblMatches"></table> -->
-	    <div class="div-table">
+	    <div id="div-table">
 	      </div>
 	    
         </div>
@@ -22,27 +22,34 @@
       .div-table {
 	  display: table;         
 	  width: auto;         
-	  background-color: #eee;         
-	  border: 1px solid #666666;         
-	  border-spacing: 5px; /* cellspacing:poor IE support for  this */
+	  border: 1px solid ;
+	  border-spacing: 5px; /* cellspacing:poor IE support for  this */;
+	  border-collapse:collapse;
+	  text-align:center;
+	  width:100%;
       }
       .div-table-row {
 	  display: table-row;
-	  width: auto;
+	  border:1px solid black;
+	  padding:5px 20px;
+	  width:25%;
 	  clear: both;
       }
       .div-table-col {
 	  float: left; /* fix for  buggy browsers */
-	  display: table-column;         
-	  width: 200px;         
-	  background-color: #ccc;  
+	  display: table-column;
+	  border:1px solid black;
+	  padding:5px 20px;
+	  width:70px
+
       }
-      section {margin:10px;padding:20px;width:95%;}
+/*      section {margin:10px;padding:20px;width:95%;}
       button {margin:10px;}
       h3 {margin:5px;}
       table {border-collapse:collapse;text-align:center;width:100%;} 
-      td,th {border:1px solid black;padding:5px 20px;width:25%}
+      td,th {border:1px solid black;padding:5px 20px;width:25%} 
       .split {float:left;width:45%;margin-right:20px;display:table;}
+*/
       .quadrat {
 	  -webkit-animation: splash-animation 3s;  /* Safari 4+ */
 	  -moz-animation: splash-animation 3s;  /* Fx 5+ */

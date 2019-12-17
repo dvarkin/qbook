@@ -1,5 +1,5 @@
 /* initialise variable */
-var ws, matches = document.getElementById("tblMatches");
+var ws, matches = document.getElementById("div-table");
 
 function connect() {
     if ("WebSocket" in window) {
@@ -39,7 +39,7 @@ function setMatchUpdate(data) {
 function insertRowHTML(i, data) {
     var rowHTML = '';
     /* loop through the rows, putting tags around each col value */
-    rowHTML += '<tr id='+ data[i]['match_id'] + '>';
+    rowHTML += '<div class="div-table-row" id='+ data[i]['match_id'] + '>';
     for (var x in data[0]) {
         /* Instead of pumping out the raw data to the table, let's
            format it according to its type*/
@@ -47,9 +47,9 @@ function insertRowHTML(i, data) {
         if("number" == typeof data[i][x])
             cellData = data[i][x].toFixed(2);
         else cellData = data[i][x];
-        rowHTML += '<td>' + cellData + '</td>';
+        rowHTML += '<div class="div-table-col">' + cellData + '</div>';
     }
-    rowHTML += '</tr>';
+    rowHTML += '</div>';
     return rowHTML
 }
 
@@ -58,16 +58,15 @@ function setMatches(data) { matches.innerHTML = generateTableHTML(data) }
 
 function generateTableHTML(data){
     /* we will iterate through the object wrapping it in the HTML table tags */
-    var tableHTML = '<table border="1"><tr>';
+    var tableHTML = '<div class="div-table-row">';
     for (var x in data[0]) {
         /* loop through the keys to create the table headers */
-        tableHTML += '<th>' + x + '</th>';
+        tableHTML += '<div class="div-table-col" align="center">' + x + '</div>';
     }
-    tableHTML += '</tr>';
+    tableHTML += '</div>';
     for (var i = 0; i < data.length; i++) {
         /* loop through the rows, putting tags around each col value */
 	tableHTML += insertRowHTML(i, data);
     }
-    tableHTML += '</table>';
     return tableHTML;
 }
