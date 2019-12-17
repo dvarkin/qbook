@@ -1,19 +1,33 @@
-\l m64/kfk.q
 h:hopen`::5001; /* connect to rdb */
-kfk_cfg:`metadata.broker.list`statistics.interval.ms!`localhost:9092`10000
 
-producer:.kfk.Producer[kfk_cfg]
+m:{h"get_all_matches_state()"}
 
-test_topic:.kfk.Topic[producer;`match;()!()]
+\p 5002
 
-match_snapshot:{
- r1: h"match_score()";
- r2: h"match_1x2()";
- msg_score: .j.j r1;
- msg_1x2: .j.j r2;
- show msg_score;
- show msg_1x2;
- }
+.z.ws:{value x};
+.z.wc: { delete from `subs where handle=x};
+
+subs:2!flip `handle`func`params!"is*"$\:();
+
+sub:{`subs upsert(.z.w;x;enlist y)};
+
+loadPage:{ getMatches[.z.w]; sub[`putMatchUpdate;enlist `]}
+
+getMatches:{ (neg[x]) .j.j `func`result!(`getMatches;m())}
+
+putMatchUpdate:{`func`result!(`putMatchUpdate; h"queue")}
+
+pub:{
+ row:(0!subs)[x];
+ (neg row[`handle]) .j.j (value row[`func])[row[`params]];
+ };
+
+.z.ts:{
+ pub each til count subs;
+ h"clean_queue()";
+ };
+\t 1000
+
 
 
 

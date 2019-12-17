@@ -7,7 +7,7 @@ numberOfGoals: 10
 numberOfUpdates: 100
 numberOfScores: numberOfMatches * numberOfUpdates
 numberOfPrices: numberOfMatches * numberOfUpdates * 50
-coefLimits: 2.0 10.0
+coefLimits: 10.0
 a:`dyno`rick`morty`doom`hell`queen`king`kiss`42
 
 date:.z.p;
@@ -30,9 +30,9 @@ match: ([]
 market: ([]
  match_id:numberOfPrices ?numberOfMatches;
  ts: numberOfPrices?(.z.p);
- home: numberOfPrices?(rand coefLimits);
- draw: numberOfPrices?(rand coefLimits);
- away: numberOfPrices?(rand coefLimits))
+ home: 1.01+numberOfPrices?coefLimits;
+ draw: 1.01+numberOfPrices?coefLimits;
+ away: 1.01+numberOfPrices?coefLimits)
 
 insert_1x2:{[data]
  `market insert(data[`match_id]; .z.p; rand coefLimits; rand coefLimits; rand coefLimits);
@@ -43,8 +43,8 @@ insert_1x2:{[data]
 score: ([]
  match_id:numberOfScores?numberOfMatches;
  ts:numberOfScores?(.z.p);
- home_score:numberOfScores?(rand numberOfGoals);
- away_score:numberOfScores?(rand numberOfGoals)
+ home_score:numberOfScores?numberOfGoals;
+ away_score:numberOfScores?numberOfGoals
  )
 
 
@@ -80,7 +80,6 @@ get_all_matches_state: {
  }
 
 
-//// kafka
 
 
 // setup JSON decoder
@@ -100,16 +99,6 @@ insert_score test_data
 insert_1x2 test_data
 
 
-\l m64/kfk.q
-// create consumer process within group 0
-client:.kfk.Consumer[`metadata.broker.list`group.id!`localhost:9092`0];
+//d: (`match_id`home`away)! 1 10 10
 
-.kfk.consumecb:{[msg]
- data: decode["c"$msg[`data]];
- insert_score[data];
- insert_1x2[data];
- }
-
-// Subscribe
-
-.kfk.Sub[client;`test;enlist .kfk.PARTITION_UA];
+//select home_team,away_team,home,draw,away,home_score,away_score from get_all_matches_state() where match_id=1

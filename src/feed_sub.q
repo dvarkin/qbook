@@ -1,27 +1,25 @@
 /////////////
-// setup Kafka consumer
+// setup Kafka
+//// kafka
 
-h:hopen`::5001; /* connect to rdb */
+queue: ()!();
 
+clean_queue:{queue:: () ! ();}
 
 \l m64/kfk.q
+// create consumer process within group 0
+client:.kfk.Consumer[`metadata.broker.list`group.id!`localhost:9092`0];
 
-// send snapshot back to Kafka
-
-kfk_cfg:`metadata.broker.list`statistics.interval.ms!`localhost:9092`10000
-
-producer:.kfk.Producer[kfk_cfg]
-
-snapshot_topic:.kfk.Topic[producer;`matchSnapshot;()!()]
-
-.z.ts:{[data]
- s: h"get_all_matches_state()";
- msg: .j.j s;
- .kfk.Pub[snapshot_topic;.kfk.PARTITION_UA; msg;"score"];
+.kfk.consumecb:{[msg]
+ data: decode["c"$msg[`data]];
+ insert_score[data];
+ insert_1x2[data];
+// show data;
+ match_id: data[`match_id];
+ match_state: get_match_state match_id ;
+ queue[match_id]:match_state;
  }
 
+// Subscribe
 
-\t 1000
-
-//select home_team,away_team,home,draw,away,home_score,away_score from get_all_matches_state() where match_id=1
-
+.kfk.Sub[client;`test;enlist .kfk.PARTITION_UA];
