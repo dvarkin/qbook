@@ -36,6 +36,8 @@ function setMatchUpdate(data) {
     }
 }
 
+function isFloat(n) { return n === +n && n !== (n|0) }
+
 function insertRowHTML(i, data) {
     var rowHTML = '';
     /* loop through the rows, putting tags around each col value */
@@ -44,7 +46,8 @@ function insertRowHTML(i, data) {
         /* Instead of pumping out the raw data to the table, let's
            format it according to its type*/
         var cellData;
-        if("number" == typeof data[i][x])
+	//cellData = data[i][x];
+        if(isFloat(data[i][x]))
             cellData = data[i][x].toFixed(2);
         else cellData = data[i][x];
         rowHTML += '<div class="div-table-col">' + cellData + '</div>';
